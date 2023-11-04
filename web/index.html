@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IFChat</title>
+  <link rel="stylesheet" href="/static/styles/globals.css">
+  <link rel="stylesheet" href="/static/styles/chat.css">
+</head>
+<body>
+  <div class="container">
+    <div class="username-modal">
+      <main class="content">
+        <h1>Bem-vindo</h1>
+        <p>Tenha uma ótima experiência enquanto conversa com seus amigos!</p>
+        
+        <div class="form">
+          <label for="server-input">Insira o IP do servidor: </label>
+          <input type="text" id="server-input" placeholder="IP do servidor">
+          <label for="username-input">Insira seu nome de usuário: </label>
+          <input type="text" id="username-input" placeholder="Seu username" />
+          <button id="join-chat">Join Chat</button>
+        </div>
+      </main>
+    </div>
+
+    <div class="chat">
+      <header class="head">
+        <h3>Conversas</h3>
+        <span>IFChat</span>
+        <div/>
+      </header>
+
+      <div class="side"></div>
+
+      <main class="main">
+        <header>
+          <p>Chat Global</p>
+
+          <p class="time">17:12</p>
+
+          <p>
+            Online
+          </p>
+        </header>
+
+        <div class="messages">
+          <!-- <div class="message">
+            <span class="username">Hugo Souza</span>
+            <p>US carinha!</p>
+            <span class="time">19:00</span>
+          </div> -->
+        </div>
+      </main>
+      
+      <div class="foot">
+        <div class="form">
+          <input class="message-input" type="text" placeholder="Digite alguma coisa...">
+          <button class="send-button">Send</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    var username = ""
+    const socket = new WebSocket("ws://localhost:8080/");
+
+    socket.onopen = (event) => {
+      console.log("WebSocket connection opened");
+    };
+
+    socket.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      const messages = document.querySelector(".messages");
+
+      const messageDiv = document.createElement("div");
+      messageDiv.classList.add("message");
+
+      if (data.userId === username) {
+        messageDiv.classList.add("owner");
+      }
+
+      if (data.userId === 'System') {
+        messageDiv.classList.add("system");
+      }
+
+      const userSpan = document.createElement("span");
+      userSpan.classList.add("username");
+      userSpan.textContent = data.userId;
+
+      const contentParagraph = document.createElement("p");
+      contentParagraph.textContent = data.content;
+
+      const messageTime = document.createElement("span");
+      messageTime.classList.add("time")
+      messageTime.textContent = getCurrentTimeHoursMinutes();
+
+      messageDiv.appendChild(userSpan);
+      messageDiv.appendChild(contentParagraph);
+      messageDiv.appendChild(messageTime);
+      
+      messages.appendChild(messageDiv);
+    };
+
+    socket.onclose = (event) => {
+      if (event.wasClean) {
+        console.log(`Connection closed cleanly, code=${event.code}, reason=${event.reason}`);
+      } else {
+        console.error(`Connection died`);
+      }
+    };
+
+    socket.onerror = (error) => {
+      console.error(`WebSocket Error: ${error.message}`);
+    };
+
+    const usernameModal = document.querySelector(".username-modal");
+    const joinChatButton = document.querySelector("#join-chat");
+    const chatDiv = document.querySelector(".chat");
+    
+    joinChatButton.addEventListener("click", () => {
+      const usernameInput = document.querySelector("#username-input");
+      
+      if (usernameInput.value.trim() !== "") {
+        usernameModal.style.display = "none";
+        chatDiv.style.display = "grid";
+
+        socket.send(JSON.stringify({ type: "username", username: usernameInput.value }));
+        username = usernameInput.value
+      }
+    });
+
+    const sendButton = document.querySelector(".send-button");
+    sendButton.addEventListener("click", () => {
+        const messageInput = document.querySelector(".message-input");
+        const message = messageInput.value;
+        socket.send(message);
+        messageInput.value = "";
+    });
+
+    setInterval(() => {
+      document.querySelector('.time').textContent = getCurrentTimeHoursMinutes()
+    }, 1000)
+
+    const getCurrentTimeHoursMinutes = () => {
+      return `${formatTime(new Date().getHours())}:${formatTime(new Date().getMinutes())}`
+    }
+
+    const formatTime = (number) => {
+      if (number < 10) return `0${number}`
+      return number
+    }
+  </script>
+</body>
+</html>
