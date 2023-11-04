@@ -1,19 +1,24 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>IFChat</title>
   <link rel="stylesheet" href="/static/styles/globals.css">
   <link rel="stylesheet" href="/static/styles/chat.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
+
 <body>
   <div class="container">
     <div class="username-modal">
       <main class="content">
         <h1>Bem-vindo</h1>
         <p>Tenha uma ótima experiência enquanto conversa com seus amigos!</p>
-        
+
         <div class="form">
           <label for="server-input">Insira o IP do servidor: </label>
           <input type="text" id="server-input" placeholder="IP do servidor">
@@ -25,24 +30,40 @@
     </div>
 
     <div class="chat">
-      <header class="head">
+      <div class="line">
         <h3>Conversas</h3>
+
+        <button style="background-color: #2A2E2F;" onmouseover="cursor: pointer">
+          <img src="/static/assets/globe.svg">
+        </button>
+
+      </div>
+      <header class="head">
+
         <span>IFChat</span>
-        <div/>
+        <div />
       </header>
 
-      <div class="side"></div>
+      <div class="side">
+        <div></div>
+      </div>
 
       <main class="main">
-        <header>
-          <p>Chat Global</p>
+        <div class="head-container">
+          <header>
+            <p>Chat Global</p>
 
-          <p class="time">17:12</p>
+            <p class="time">17:12</p>
 
-          <p>
-            Online
-          </p>
-        </header>
+            <div class="status-info">
+              <div class="color-status"></div>
+              <p>
+                Online
+              </p>
+            </div>
+          </header>
+        </div>
+
 
         <div class="messages">
           <!-- <div class="message">
@@ -52,11 +73,15 @@
           </div> -->
         </div>
       </main>
-      
+
       <div class="foot">
         <div class="form">
           <input class="message-input" type="text" placeholder="Digite alguma coisa...">
-          <button class="send-button">Send</button>
+          <button class="send-button"><svg fill="#ffffff" width="24px" height="24px" viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M15.379,19.1403 L12.108,12.5993 L19.467,5.2413 L15.379,19.1403 Z M4.86,8.6213 L18.76,4.5343 L11.401,11.8923 L4.86,8.6213 Z M3.359,8.0213 C2.923,8.1493 2.87,8.7443 3.276,8.9483 L11.128,12.8733 L15.053,20.7243 C15.256,21.1303 15.852,21.0773 15.98,20.6413 L20.98,3.6413 C21.091,3.2623 20.739,2.9093 20.359,3.0213 L3.359,8.0213 Z" />
+            </svg></button>
         </div>
       </div>
     </div>
@@ -79,11 +104,14 @@
 
       if (data.userId === username) {
         messageDiv.classList.add("owner");
+      } else if (data.userId === 'System') {
+        messageDiv.classList.add("system");
+      } else {
+        messageDiv.classList.add("received");
       }
 
-      if (data.userId === 'System') {
-        messageDiv.classList.add("system");
-      }
+      const salience = document.createElement("div");
+      salience.classList.add("salience");
 
       const userSpan = document.createElement("span");
       userSpan.classList.add("username");
@@ -96,10 +124,11 @@
       messageTime.classList.add("time")
       messageTime.textContent = getCurrentTimeHoursMinutes();
 
+      messageDiv.appendChild(salience);
       messageDiv.appendChild(userSpan);
       messageDiv.appendChild(contentParagraph);
       messageDiv.appendChild(messageTime);
-      
+
       messages.appendChild(messageDiv);
     };
 
@@ -118,10 +147,10 @@
     const usernameModal = document.querySelector(".username-modal");
     const joinChatButton = document.querySelector("#join-chat");
     const chatDiv = document.querySelector(".chat");
-    
+
     joinChatButton.addEventListener("click", () => {
       const usernameInput = document.querySelector("#username-input");
-      
+
       if (usernameInput.value.trim() !== "") {
         usernameModal.style.display = "none";
         chatDiv.style.display = "grid";
@@ -131,13 +160,23 @@
       }
     });
 
+    const sendMessage = () => {
+      const message = messageInput.value;
+      if (message.trim() == "") return
+      socket.send(message);
+      messageInput.value = "";
+    }
+
     const sendButton = document.querySelector(".send-button");
-    sendButton.addEventListener("click", () => {
-        const messageInput = document.querySelector(".message-input");
-        const message = messageInput.value;
-        socket.send(message);
-        messageInput.value = "";
-    });
+    const messageInput = document.querySelector(".message-input");
+    messageInput.addEventListener("keyup", (event) => {
+      if (event.key === "Enter") {
+        sendMessage();
+      }
+    })
+    sendButton.addEventListener("click", sendMessage);
+
+
 
     setInterval(() => {
       document.querySelector('.time').textContent = getCurrentTimeHoursMinutes()
@@ -153,4 +192,5 @@
     }
   </script>
 </body>
+
 </html>

@@ -25,6 +25,8 @@
   border-radius: 8px;
 
   background: #fff;
+
+  color: black;
 }
 
 .username-modal .form {
@@ -41,6 +43,8 @@
 
   border: 1px solid #797979;
   border-radius: 8px;
+
+  width: 80%;
 }
 
 .username-modal .form button {
@@ -68,12 +72,23 @@
   height: 100vh;
 
   grid-template-areas: 
-    "head head"
+    "line head"
     "side main"
     "side foot";
 
   grid-template-rows: 80px 1fr 96px;
-  grid-template-columns: 256px 1fr;
+  grid-template-columns: 300px 1fr;
+}
+
+.container .chat .line {
+  grid-area: line;
+  border-right: 1px solid #797979;
+  border-bottom: 1px solid #797979;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: white;
+  padding: 0 32px;
 }
 
 .container .chat .head {
@@ -81,7 +96,7 @@
 
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
 
   padding: 0 32px;
 
@@ -94,47 +109,67 @@
   grid-area: side;
 
   border-right: 1px solid #797979;
+
+  display: flex;
+  flex-direction: column;
 }
 
 .container .chat .foot {
   grid-area: foot;
   
-  padding: 16px;
-
-  border-top: 1px solid #797979;
+  padding: 20px;
 }
 
 .container .chat .foot .form {
   grid-area: foot;
   
-  background: var(--secondary-color);
-  border-radius: 8px;
-  padding: 16px;
+  background-color: #3C4358;
+  border-radius: 20px;
+  padding: 12px 24px;
+
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
 }
 
 .container .chat .foot .form input {
   height: 40px;
 
   background: transparent;
-  border: 1px solid #797979;
+  border: 2px solid #797979;
   border-radius: 8px;
 
   padding: 0 16px;
+
+  color: #fff;
+  font-size: 16px;
+
+  width: 100%;
+}
+
+.container .chat .foot .form input::placeholder {
+  color: #797979;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.container .chat .foot .form button {
+  height: 40px;
+  width: 40px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background: #8179AD;
+  border-radius: 8px;
 
   color: #fff;
   font-size: 16px;
 }
 
-.container .chat .foot .form button {
-  height: 40px;
-
-  background: #8179AD;
-  border-radius: 8px;
-
-  padding: 0 16px;
-
-  color: #fff;
-  font-size: 16px;
+.container .chat .foot .form button:hover {
+  cursor: pointer;
 }
 
 .container .chat .main {
@@ -142,8 +177,11 @@
 
   grid-area: main;
   padding: 8px;
+  /* padding-left: 32px;
+  padding-right: 32px; */
 
   overflow: auto;
+  overflow-x: hidden;
   display: flex;
   flex-direction: column-reverse;
   overflow-anchor: auto in !important;
@@ -151,8 +189,9 @@
 
 .container .chat .main header {
   position: absolute;
-
   top: 0;
+  margin-top: 16px;
+  width: 90%;
 
   background-color: var(--primary-color);
   color: #fff;
@@ -160,7 +199,7 @@
   height: 64px;
 
   border: 1px solid #797979;
-  border-radius: 8px;
+  border-radius: 16px;
 
   display: flex;
   align-items: center;
@@ -169,34 +208,82 @@
   padding: 0 32px;
 }
 
+.head-container {
+  display: flex;
+  width: 99%;
+  /* background-color: #8179AD; */
+  height: 100px;
+  position: absolute;
+  top: 0;
+  justify-content: center;
+}
+
+.status-info{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.color-status {
+  height: 12px;
+  width: 12px;
+  border-radius: 50%;
+  background-color: #10A760; /*#F30000 <- Se offline*/
+}
+
 .container .chat .main .messages {  
   margin-top: 16px;
   display: grid;
 }
 
 .container .chat .main .message {
-  background: #5E666A;
-  color: #fff;
+  position: relative;
 
-  padding: 16px;
+  padding: 16px 24px;
+
 
   border-radius: 8px;
-  margin-top: 16px;
 
-  max-width: 512px;
-
+  margin: 16px 32px;
   display: grid;
 }
 
 .container .chat .main .message.owner {
   background: #4C5365;
-
-  width: 100%;
+  max-width: 42%;
   justify-self: right;
+}
+
+.container .chat .main .message.received {
+  background: #5E666A;
+  max-width: 42%;
+  justify-self: left;
+}
+
+.container .chat .main .message.owner .salience {
+  height: 20px;
+  width: 20px;
+  transform: rotate(45deg);
+  position: absolute;
+  background-color: #4C5365;
+  top: 10px;
+  right: -4px;
+}
+
+.container .chat .main .message.received .salience {
+  height: 20px;
+  width: 20px;
+  transform: rotate(45deg);
+  position: absolute;
+  background-color: #5E666A;
+  top: 10px;
+  left: -4px;
 }
 
 .container .chat .main .message .username {
   font-size: 14px;
+  font-weight: 600;
+  font-style: italic;
 }
 
 .container .chat .main .message p {
@@ -204,8 +291,16 @@
 }
 
 .container .chat .main .message .time {
-  font-size: 12px;
-  justify-self: right;
+  position: absolute;
+  font-size: 16px;
+  bottom: 0;
+  right: -48px;
+  color: #5E666A;
+  font-weight: 400;
+}
+
+.container .chat .main .message.owner .time {
+  left: -48px;
 }
 
 .container .chat .main .message.system {
@@ -217,7 +312,7 @@
   border-radius: 8px;
   margin-top: 16px;
 
-  max-width: 256px;
+  max-width: 45%;
 
   font-size: 14px;
   justify-self: center;
