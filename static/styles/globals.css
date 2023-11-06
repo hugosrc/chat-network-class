@@ -9,7 +9,7 @@
 }
 
 :root {
-  --background-color: #2A2E2F;  
+  --background-color: #2A2E2F;
   --primary-color: #2B344C;
   --secondary-color: #333843;
 }
@@ -20,6 +20,7 @@ body {
   color: white;
 }
 
-input, button {
+input,
+button {
   border: none;
 }
