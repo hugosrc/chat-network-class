@@ -16,17 +16,16 @@
 .username-modal .content {
   display: flex;
   flex-direction: column;
+  gap: 16px;
 
   margin: 0 auto;
-  
+
   max-width: 420px;
 
   padding: 24px;
   border-radius: 8px;
 
-  background: #fff;
-
-  color: black;
+  background: #2B344C;
 }
 
 .username-modal .form {
@@ -40,20 +39,41 @@
 .username-modal .form input {
   height: 40px;
   padding: 0 16px;
+  background-color: #2B344C;
 
-  border: 1px solid #797979;
+  border: 2px solid #797979;
   border-radius: 8px;
 
-  width: 80%;
+  color: #fff;
+
+  width: 100%;
+}
+
+.username-modal .form input:focus {
+  border: 2px solid #8179AD;
+}
+
+.username-modal .form input:hover::placeholder {
+  color: #5E666A;
+}
+
+.username-modal .form input:focus::placeholder {
+  color: #5E666A;
+}
+
+.username-modal .form input::placeholder {
+  font-weight: 500;
+  font-size: 14px;
 }
 
 .username-modal .form button {
   height: 40px;
+  margin-top: 16px;
 
-  border: 1px solid#797979;
+  /* border: 1px solid#797979; */
   border-radius: 8px;
 
-  background: var(--primary-color);
+  background-color: #8179AD;
   color: #fff;
 
   font-weight: bold;
@@ -67,11 +87,11 @@
 
 .container .chat {
   display: none;
-  
+
   width: 100vw;
   height: 100vh;
 
-  grid-template-areas: 
+  grid-template-areas:
     "line head"
     "side main"
     "side foot";
@@ -116,13 +136,13 @@
 
 .container .chat .foot {
   grid-area: foot;
-  
+
   padding: 20px;
 }
 
 .container .chat .foot .form {
   grid-area: foot;
-  
+
   background-color: #3C4358;
   border-radius: 20px;
   padding: 12px 24px;
@@ -218,7 +238,7 @@
   justify-content: center;
 }
 
-.status-info{
+.status-info {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -228,10 +248,11 @@
   height: 12px;
   width: 12px;
   border-radius: 50%;
-  background-color: #10A760; /*#F30000 <- Se offline*/
+  background-color: #10A760;
+  /*#F30000 <- Se offline*/
 }
 
-.container .chat .main .messages {  
+.container .chat .main .messages {
   margin-top: 16px;
   display: grid;
 }
