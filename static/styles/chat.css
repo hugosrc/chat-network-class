@@ -134,6 +134,31 @@
   flex-direction: column;
 }
 
+.container .chat .side .global-chat {
+  height: 64px;
+  width: 90%;
+
+  margin-top: 16px;
+  margin-left: auto;
+  margin-right: auto;
+
+  padding: 24px;
+
+  background-color: #2B344C;
+
+  border: 1px solid #797979;
+  border-radius: 16px;
+
+  color: #fff;
+  font-size: 14px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+
+}
+
 .container .chat .foot {
   grid-area: foot;
 
